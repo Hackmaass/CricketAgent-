@@ -49,12 +49,12 @@ graph TD
 
 ## 🌟 Core System Features
 
-### 1. ⚔️ The Multi-Agent Adversarial Debate
-OMEGA orchestrates a structured, real-time tactical debate utilizing a single optimized, high-fidelity prompt. Four distinct AI personas analyze the game parameters from conflicting perspectives, exposing blind spots and identifying risks:
-*   🧮 **THE QUANT (Probability Shift Engine):** Strictly clinical, objective, and data-driven. Computes matchup exploits, boundary pressure indexes, and historical run-rate shifts.
-*   👑 **THE STRATEGIST (IPL Captaincy Brain):** The practical decision maker. Formulates bowling plans, target coordinates, and pressure-containment goals.
-*   😈 **THE SKEPTIC (Adversarial Critic):** High-tension critique. Highlights spinner limitations, boundary-dimension hazards, and micro-climate failures.
-*   🎙️ **THE BROADCASTER (Match Commentator):** Synthesizes the debate into poetic, cinematic commentary, explaining "why this strategy works" for the fans.
+### 1. ⚔️ The Multi-Agent Orchestration Pipeline
+OMEGA orchestrates a structured, real-time tactical debate utilizing four independent Gemini agent calls. The system leverages parallel and sequential `Promise.all` orchestration to expose blind spots and identify risks:
+*   🧮 **THE QUANT (Phase 1 Parallel):** A clinical probability engine. Computes matchup exploits, boundary pressure indexes, and historical run-rate shifts.
+*   😈 **THE SKEPTIC (Phase 1 Parallel):** An adversarial critic. Highlights spinner limitations, boundary-dimension hazards, and micro-climate (dew) failures.
+*   👑 **THE STRATEGIST (Phase 2 Sequential):** The practical captaincy brain. Consumes Quant and Skeptic inputs to formulate bowling plans, target coordinates, and pressure-containment goals.
+*   🎙️ **THE BROADCASTER (Phase 3 Sequential):** Synthesizes the entire debate trace into poetic, cinematic commentary.
 
 ### 2. 🏆 Legendary Scenario Presets (One-Click Testing)
 To eliminate manual form filling during analysis, OMEGA includes a high-contrast **Presets** tab loaded with high-tension IPL and World Cup scenarios:
@@ -69,9 +69,10 @@ Built-in **Web Speech Synthesis Engine** allows users to listen to the final tac
 *   **Voice Registry Prioritization:** Dynamically queries system voice libraries to bind English Indian or UK dialects automatically.
 *   **Markdown Sanitizer:** Ingests the Gemini output, strips raw technical tags, and reads out a beautiful, expressive commentary.
 
-### 🎨 4. Theme-Aware Canvas Radar Visualizer
-A highly responsive HTML5 Canvas visualizes exact 2D coordinates for field setups:
-*   **Monochrome Style Mapping:** Dynamically senses body theme rules. In default mode, it renders a lush green field; in **B&W mode**, it shifts to a striking editorial layout featuring an absolute black outfield, crisp white boundary lines, and pulsing white markers.
+### 🎨 4. Holographic Iron Man HUD Radar
+A highly responsive HTML5 Canvas visualizes exact 2D coordinates for field setups, styled like an F1 pit-wall or Iron Man tactical HUD:
+*   **Glassmorphic Aesthetic:** The entire dashboard features a premium deep-space dark mode with backdrop-filters, frosted glass, electric blue neon highlights, and crisp glowing typography.
+*   **Dynamic Scanning & Danger Zones:** The canvas radar sweeps dynamically, highlighting critical boundary regions with pulsing red danger rings.
 *   **Leak-Free Resize Lifecycle:** Binds bound listeners cleanly and disposes of window resize events in the background to guarantee zero memory overhead.
 *   **Energy Saver Loop:** Terminates frame render loops after 8 seconds of active pulsing to preserve system battery and CPU cycles.
 
