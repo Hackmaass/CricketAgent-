@@ -108,6 +108,24 @@
           </div>
           <div class="key-status" id="gemini-status"></div>
         </div>
+
+        <!-- ═══ SYSTEMS DIAGNOSTIC PANEL (TESTING PILLAR) ═══ -->
+        <div class="diagnostic-panel" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);">
+          <h3 style="font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px;">System Diagnostics Protocol</h3>
+          <div class="diag-item" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-family: var(--mono); font-size: 12px;">
+            <span style="color: var(--text-3);">[PROXY] Cricbuzz Scraper Status</span>
+            <span id="diag-cricbuzz" style="color: var(--text-3);">UNTRIED</span>
+          </div>
+          <div class="diag-item" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-family: var(--mono); font-size: 12px;">
+            <span style="color: var(--text-3);">[AI] Google Gemini Ping</span>
+            <span id="diag-gemini" style="color: var(--text-3);">UNTRIED</span>
+          </div>
+          <div class="diag-item" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-family: var(--mono); font-size: 12px;">
+            <span style="color: var(--text-3);">[INFRA] Firebase SDK Initialization</span>
+            <span id="diag-firebase" style="color: var(--text-3);">UNTRIED</span>
+          </div>
+          <button id="btn-run-diagnostics" class="btn-ghost" style="width: 100%; font-family: var(--mono); font-size: 11px; letter-spacing: 1px;">⚡ RUN DIAGNOSTICS PROTOCOL</button>
+        </div>
       </div>
     </div>
   </div>

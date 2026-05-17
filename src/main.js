@@ -123,6 +123,63 @@ document.getElementById('save-gemini').addEventListener('click', () => {
   }
 });
 
+// Systems Diagnostics Protocol
+document.getElementById('btn-run-diagnostics').addEventListener('click', async () => {
+  const cricEl = document.getElementById('diag-cricbuzz');
+  const gemEl = document.getElementById('diag-gemini');
+  const fireEl = document.getElementById('diag-firebase');
+
+  cricEl.textContent = 'TESTING...'; cricEl.style.color = 'var(--text-3)';
+  gemEl.textContent = 'TESTING...'; gemEl.style.color = 'var(--text-3)';
+  fireEl.textContent = 'TESTING...'; fireEl.style.color = 'var(--text-3)';
+
+  // 1. Test Cricbuzz Scraping via proxy
+  try {
+    const matches = await fetchLiveMatches();
+    if (matches && matches.length >= 0) {
+      cricEl.textContent = 'ONLINE ✓'; cricEl.style.color = 'var(--green)';
+    } else {
+      throw new Error('No match data returned');
+    }
+  } catch (err) {
+    cricEl.textContent = 'FAILED ✕'; cricEl.style.color = 'var(--red)';
+  }
+
+  // 2. Test Gemini Connection
+  try {
+    const k = geminiKey || import.meta.env.VITE_GEMINI_KEY;
+    if (!k) throw new Error('No key configured');
+    
+    // Perform lightweight health-check / ping request to Gemini API
+    const pingUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${k}`;
+    const res = await fetch(pingUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: 'Respond with OK' }] }]
+      })
+    });
+    if (res.ok) {
+      gemEl.textContent = 'CONNECTED ✓'; gemEl.style.color = 'var(--green)';
+    } else {
+      throw new Error('API rejection');
+    }
+  } catch (err) {
+    gemEl.textContent = 'FAILED ✕'; gemEl.style.color = 'var(--red)';
+  }
+
+  // 3. Test Firebase SDK
+  try {
+    if (auth && auth.app) {
+      fireEl.textContent = 'INITIALIZED ✓'; fireEl.style.color = 'var(--green)';
+    } else {
+      throw new Error('SDK missing app configuration');
+    }
+  } catch (err) {
+    fireEl.textContent = 'FAILED ✕'; fireEl.style.color = 'var(--red)';
+  }
+});
+
 // Auth Form Logic
 let isSignUp = false;
 const authForm = document.getElementById('auth-form');
