@@ -64,6 +64,25 @@
   text-decoration: underline;
 }
 
+/* Purify glows and gradients in B&W mode (Accessibility & Security) */
+.bw-theme .glow-orb,
+.bw-theme .orb-1,
+.bw-theme .orb-2 {
+  display: none !important;
+}
+
+.bw-theme .hero-line-2 {
+  background: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+.bw-theme .hero-badge {
+  color: #ffffff !important;
+  background: #000000 !important;
+  border-color: #333333 !important;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: 100%; -webkit-font-smoothing: antialiased; }
 body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text-1); overflow: hidden; }
