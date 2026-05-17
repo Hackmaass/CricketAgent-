@@ -58,6 +58,63 @@ document.querySelectorAll('.tab-btn').forEach(b => {
   b.addEventListener('click', () => switchTab(b.dataset.tab));
 });
 
+// Speech synthesis state
+let currentCommentaryText = '';
+let isSpeaking = false;
+const synth = window.speechSynthesis;
+
+// Preset Scenarios data mapping
+const PRESETS = {
+  'csk-gt': {
+    innings: "2",
+    battingTeam: "CSK",
+    bowlingTeam: "GT",
+    score: "161",
+    wickets: "5",
+    overs: "14.4",
+    target: "171",
+    striker: "Ravindra Jadeja",
+    nonStriker: "Shivam Dube",
+    bowler: "Mohit Sharma",
+    bowlerType: "fast-medium",
+    venue: "Narendra Modi Stadium, Ahmedabad",
+    dew: "None",
+    context: "CSK vs GT IPL 2023 Final replica. 10 runs needed off 2 balls. Jadeja on strike vs Mohit Sharma."
+  },
+  't20-wc': {
+    innings: "2",
+    battingTeam: "RCB",
+    bowlingTeam: "MI",
+    score: "147",
+    wickets: "4",
+    overs: "15.0",
+    target: "177",
+    striker: "Virat Kohli",
+    nonStriker: "Dinesh Karthik",
+    bowler: "Jasprit Bumrah",
+    bowlerType: "fast",
+    venue: "Wankhede, Mumbai",
+    dew: "None",
+    context: "T20 WC 2024 Final replicas. 30 needed off 30 balls. Klaasen/Miller-style high tension chase."
+  },
+  'chepauk-trap': {
+    innings: "2",
+    battingTeam: "RCB",
+    bowlingTeam: "GT",
+    score: "95",
+    wickets: "3",
+    overs: "12.0",
+    target: "180",
+    striker: "Virat Kohli",
+    nonStriker: "Rajat Patidar",
+    bowler: "Rashid Khan",
+    bowlerType: "legspin",
+    venue: "Chepauk, Chennai",
+    dew: "None",
+    context: "Chepauk spin trap. 85 runs needed off 48 balls. Turning track, spinner Rashid Khan bowling."
+  }
+};
+
 // Prediction tab switching (Concise View)
 function switchPredTab(tabName) {
   document.querySelectorAll('.pred-tab').forEach(b => {
@@ -75,6 +132,84 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Preset Scenario Cards Click Handler
+document.addEventListener('click', (e) => {
+  const presetCard = e.target.closest('.preset-card');
+  if (presetCard) {
+    const presetId = presetCard.dataset.preset;
+    const preset = PRESETS[presetId];
+    if (preset) {
+      if (!currentUser) { openAuthModal(); return; }
+      
+      // Auto populate manual form inputs
+      document.getElementById('f-innings').value = preset.innings;
+      document.getElementById('f-batting').value = preset.battingTeam;
+      document.getElementById('f-bowling').value = preset.bowlingTeam;
+      document.getElementById('f-score').value = preset.score;
+      document.getElementById('f-wickets').value = preset.wickets;
+      document.getElementById('f-overs').value = preset.overs;
+      document.getElementById('f-target').value = preset.target;
+      document.getElementById('f-striker').value = preset.striker;
+      document.getElementById('f-nonstriker').value = preset.nonStriker;
+      document.getElementById('f-bowler').value = preset.bowler;
+      document.getElementById('f-bowlertype').value = preset.bowlerType;
+      document.getElementById('f-venue').value = preset.venue;
+      document.getElementById('f-dew').value = preset.dew;
+      document.getElementById('f-context').value = preset.context;
+
+      // Run prediction immediately
+      runPrediction(preset);
+    }
+  }
+});
+
+// Voice synthesis triggers
+document.addEventListener('click', (e) => {
+  const speakBtn = e.target.closest('#listen-broadcast');
+  if (speakBtn) {
+    toggleSpeech(speakBtn);
+  }
+});
+
+function toggleSpeech(btn) {
+  if (!synth || !currentCommentaryText) return;
+
+  if (isSpeaking) {
+    synth.cancel();
+    isSpeaking = false;
+    btn.innerHTML = `<span>🎙️ LISTEN TO HARSHA BROADCAST REVIEW</span>`;
+    return;
+  }
+
+  // Clean Markdown formatting for perfect spoken text
+  const cleanedText = currentCommentaryText
+    .replace(/\*\*|###|\*|`/g, "")
+    .replace(/🎙️ HARSHA BHOGLE BROADCAST REVIEW:/g, "Harsha Bhogle here,");
+
+  const utterance = new SpeechSynthesisUtterance(cleanedText);
+
+  // Set expressive voice (Indian or UK standard)
+  const voices = synth.getVoices();
+  const indianVoice = voices.find(v => v.lang.includes("IN") && v.name.includes("Google"));
+  const ukVoice = voices.find(v => v.lang.includes("GB"));
+  utterance.voice = indianVoice || ukVoice || voices[0];
+  utterance.rate = 0.92; // EXPRESSIVE
+  utterance.pitch = 1.05;
+
+  utterance.onend = () => {
+    isSpeaking = false;
+    btn.innerHTML = `<span>🎙️ LISTEN TO HARSHA BROADCAST REVIEW</span>`;
+  };
+  utterance.onerror = () => {
+    isSpeaking = false;
+    btn.innerHTML = `<span>🎙️ LISTEN TO HARSHA BROADCAST REVIEW</span>`;
+  };
+
+  isSpeaking = true;
+  btn.innerHTML = `<span>🔊 STOP BROADCAST PLAYBACK</span>`;
+  synth.speak(utterance);
+}
+
 document.getElementById('enter-warroom').addEventListener('click', () => {
   if (!currentUser) { openAuthModal(); return; }
   showPage('warroom');
@@ -86,7 +221,10 @@ document.getElementById('quick-predict').addEventListener('click', () => {
   switchTab('manual');
   loadLiveMatches();
 });
-document.getElementById('back-to-landing').addEventListener('click', () => showPage('landing'));
+document.getElementById('back-to-landing').addEventListener('click', () => {
+  if (synth) synth.cancel(); // Stop voice synthesis when leaving page
+  showPage('landing');
+});
 
 // ─── Clock ───
 function tick() {
@@ -454,7 +592,14 @@ function renderPrediction(data, state) {
     </div>`;
 
   // Broadcast (Broadcast Feed Tab)
+  if (synth) synth.cancel();
+  isSpeaking = false;
+  const listenBtn = document.getElementById('listen-broadcast');
+  if (listenBtn) listenBtn.innerHTML = `<span>🎙️ LISTEN TO HARSHA BROADCAST REVIEW</span>`;
+
   const bc = data.broadcast_synthesis || {};
+  currentCommentaryText = bc.elite_commentary || '';
+
   document.getElementById('pred-broadcast').innerHTML = `
     <div class="bc-headline">${bc.headline || ''}</div>
     <div class="bc-commentary">${bc.elite_commentary || ''}</div>

@@ -217,6 +217,7 @@
         <div class="sidebar-tabs" role="tablist" aria-label="Match Input Modes">
           <button class="tab-btn active" data-tab="live" role="tab" aria-selected="true" aria-controls="tab-live">Live Matches</button>
           <button class="tab-btn" data-tab="manual" role="tab" aria-selected="false" aria-controls="tab-manual">Manual Input</button>
+          <button class="tab-btn" data-tab="presets" role="tab" aria-selected="false" aria-controls="tab-presets">Presets</button>
         </div>
 
         <!-- Live Matches Tab -->
@@ -225,6 +226,26 @@
             <div class="match-list-empty">
               <p>No live matches found</p>
               <button id="refresh-matches" class="btn-ghost">↻ Refresh</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Presets Tab -->
+        <div class="tab-content" id="tab-presets">
+          <div class="presets-list" style="display:flex; flex-direction:column; gap:16px; padding:8px 0;">
+            <div class="preset-card" data-preset="csk-gt" style="border:1px solid var(--border); padding:16px; cursor:pointer; background:var(--bg-card); transition:all var(--transition);">
+              <div style="font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:700; text-transform:uppercase; margin-bottom:6px; color:#ffffff;">CSK vs GT (IPL 2023 Final)</div>
+              <p style="font-size:12px; color:var(--text-2); line-height:1.5; font-family:'Inter', sans-serif;">Nail-biter: 10 runs needed off 2 balls. Jadeja on strike vs Mohit Sharma.</p>
+            </div>
+            
+            <div class="preset-card" data-preset="t20-wc" style="border:1px solid var(--border); padding:16px; cursor:pointer; background:var(--bg-card); transition:all var(--transition);">
+              <div style="font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:700; text-transform:uppercase; margin-bottom:6px; color:#ffffff;">T20 WC 2024 Final (SA Chase)</div>
+              <p style="font-size:12px; color:var(--text-2); line-height:1.5; font-family:'Inter', sans-serif;">High Pressure: 30 needed off 30 balls. Klaasen set vs Hardik Pandya.</p>
+            </div>
+            
+            <div class="preset-card" data-preset="chepauk-trap" style="border:1px solid var(--border); padding:16px; cursor:pointer; background:var(--bg-card); transition:all var(--transition);">
+              <div style="font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:700; text-transform:uppercase; margin-bottom:6px; color:#ffffff;">Chepauk Spin Trap</div>
+              <p style="font-size:12px; color:var(--text-2); line-height:1.5; font-family:'Inter', sans-serif;">Turning Track: 85 runs needed off 48 balls. Virat Kohli vs spinner Rashid Khan.</p>
             </div>
           </div>
         </div>
@@ -357,6 +378,9 @@
               </div>
               
               <div id="pred-tab-broadcast" class="pred-tab-content">
+                <button id="listen-broadcast" class="btn-ghost" style="width:100%; margin-bottom:16px; font-family:var(--mono); font-size:11px; letter-spacing:1.5px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                  <span>🎙️ LISTEN TO HARSHA BROADCAST REVIEW</span>
+                </button>
                 <div class="pred-card pred-broadcast" id="pred-broadcast" style="border:none; background:transparent; padding:0; box-shadow:none;"></div>
               </div>
             </div>
