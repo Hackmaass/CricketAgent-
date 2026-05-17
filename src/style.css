@@ -188,15 +188,25 @@ a:hover { text-decoration: underline; }
 }
 .btn-primary:hover { background: #5558e6; transform: translateY(-1px); box-shadow: 0 8px 30px var(--accent-glow); }
 
-/* B&W Brutalist primary button hover state */
+/* B&W Brutalist primary button default & hover state */
 .bw-theme .btn-primary {
   border-radius: 0 !important;
-}
-.bw-theme .btn-primary:hover {
   background: #ffffff !important;
   color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+.bw-theme .btn-primary:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
   box-shadow: none !important;
   transform: translateY(-2px);
+}
+
+/* Clock text visibility in B&W mode */
+.bw-theme .wr-clock {
+  color: var(--text-2) !important;
+  font-weight: 500;
 }
 
 .btn-primary:active { transform: translateY(0); }
