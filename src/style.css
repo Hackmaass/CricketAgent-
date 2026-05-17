@@ -31,6 +31,39 @@
   --transition: 0.2s ease;
 }
 
+/* ═════ STRIKE BLACK & WHITE THEME ═════ */
+.bw-theme {
+  --bg: #000000;
+  --bg-elevated: #070707;
+  --bg-card: #0b0b0b;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --border: #1e1e1e;
+  --border-hover: #333333;
+  --text-1: #ffffff;
+  --text-2: #a0a0a0;
+  --text-3: #555555;
+  
+  /* Grayscale equivalents for pure B&W mapping */
+  --accent: #ffffff;
+  --accent-soft: rgba(255, 255, 255, 0.1);
+  --accent-glow: transparent;
+  
+  --green: #ffffff;
+  --green-soft: #141414;
+  --red: #ffffff;
+  --red-soft: #141414;
+  --amber: #ffffff;
+  --amber-soft: #141414;
+  --cyan: #ffffff;
+  --cyan-soft: #141414;
+}
+
+/* Override general links in B&W */
+.bw-theme a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: 100%; -webkit-font-smoothing: antialiased; }
 body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text-1); overflow: hidden; }
@@ -108,6 +141,22 @@ a:hover { text-decoration: underline; }
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text; line-height: 1.1;
 }
+
+/* Grayscale overrides for title and elements */
+.bw-theme .hero-line-2 {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  color: #ffffff !important;
+}
+
+/* Hide colorful background glowing elements entirely */
+.bw-theme .glow-orb,
+.bw-theme .grid-lines {
+  display: none !important;
+}
+
 .hero-sub { max-width: 520px; font-size: 17px; line-height: 1.7; color: var(--text-2); margin-bottom: 40px; }
 
 .hero-actions { display: flex; gap: 14px; margin-bottom: 60px; }
@@ -119,6 +168,18 @@ a:hover { text-decoration: underline; }
   border: none; cursor: pointer; transition: all var(--transition);
 }
 .btn-primary:hover { background: #5558e6; transform: translateY(-1px); box-shadow: 0 8px 30px var(--accent-glow); }
+
+/* B&W Brutalist primary button hover state */
+.bw-theme .btn-primary {
+  border-radius: 0 !important;
+}
+.bw-theme .btn-primary:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  transform: translateY(-2px);
+}
+
 .btn-primary:active { transform: translateY(0); }
 .btn-secondary {
   padding: 14px 28px; border-radius: var(--radius);
@@ -127,6 +188,10 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--border); cursor: pointer; transition: all var(--transition);
 }
 .btn-secondary:hover { border-color: var(--border-hover); background: var(--bg-hover); }
+
+.bw-theme .btn-secondary {
+  border-radius: 0 !important;
+}
 
 .hero-stats { display: flex; align-items: center; gap: 32px; }
 .hero-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
