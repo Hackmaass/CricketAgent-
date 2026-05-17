@@ -1,117 +1,150 @@
-# ⚡ OMEGA — IPL Tactical Intelligence OS
+# 🏏 OMEGA — Live IPL Tactical Intelligence OS
 
-### *The Cinematic Multi-Agent IPL Prediction Engine — Powered by Google Gemini*
+### *The Cinematic Multi-Agent IPL Prediction & Strategy Engine — Powered by Google Gemini*
 
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-8B5CF6?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![DOMParser](https://img.shields.io/badge/Scraper-DOMParser-10B981?style=for-the-badge)](#)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-000000?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-000000?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-Auth-000000?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com/)
+[![Aesthetic](https://img.shields.io/badge/Design-Black%20%26%20White%20Editorial-000000?style=for-the-badge)](#)
 
-> *"OMEGA is not a score predictor. It is a live F1 pit-wall strategy room built for the intensity of the IPL dugout."*
-
----
-
-## 🌟 What is OMEGA?
-
-OMEGA is a state-of-the-art **multi-agent tactical operating system**. By feeding it a live match state, OMEGA doesn't just predict who wins—it orchestrates an adversarial debate among four distinct AI agents to generate mathematically grounded, physically aware cricket strategy in real-time.
-
-1. 📡 **Real-Time Data Integration** — Scrapes live IPL matches directly via a custom proxy engine.
-2. ⚔️ **4-Agent Debate Loop** — Specialized AI personas clash over tactics, exposing blind spots.
-3. 🌦️ **Geospatial & Micro-Climate Context** — Dynamically models stadium dimensions, soil profiles, and heavy dew factors.
-4. 🎙️ **Cinematic Synthesis** — Outputs tactical plans in the electrifying language of an IPL broadcaster.
+> *"OMEGA is not a simple score predictor. It is a live F1-style pit-wall strategy terminal designed for the high-stakes intensity of the IPL dugout, wrapped in an ultra-premium editorial Black & White visual aesthetic."*
 
 ---
 
-## 🧠 The Four Specialists
+## 🏛️ System Architecture
 
-OMEGA utilizes a single unified Google Gemini prompt structure to trigger a structured JSON debate between four named personas:
-
-| Agent | Role | Focus |
-| --- | --- | --- |
-| 🧮 **THE QUANT** | Probability Engine | Clinical, numbers-driven run-rate modeling. Identifies statistical boundary pressure. |
-| 👑 **THE STRATEGIST** | Captaincy Brain | Sharp, pragmatic leadership. Maps out the primary bowling/fielding decisions. |
-| 😈 **THE SKEPTIC** | Adversarial Attacker | Exposes blind spots. Paranoid. Heavily scrutinizes the *Micro-Climate (Dew)* and pitches. |
-| 🎙️ **THE BROADCASTER** | Cricket Storyteller | Synthesizes the final decision into electric, high-tension commentary. |
-
----
-
-## 🌪️ Advanced System Features
-
-### 1. 🛡️ Unrestricted Live Match Engine
-Most cricket APIs are rate-limited or expensive. OMEGA utilizes a custom **Vite Proxy Tunnel** to intercept requests, bypass CORS, and use the browser's native `DOMParser` to extract live scores, overs, and match status directly from the web, unrestricted and free. Includes a **30-second TTL cache** to prevent throttling.
-
-### 2. 🌍 Geospatial & Micro-Climate Injection
-OMEGA is mathematically aware of the physical stadium. If a match is played at Wankhede, the engine automatically injects data regarding its **Red Soil, high bounce, and short 64m square boundaries**, and actively calculates **Dew Risk** based on humidity hashes. The AI adjusts its spin and pace strategies accordingly.
-
-### 3. 🔐 Commander Authentication
-Secured via a gorgeous glassmorphic **Firebase Authentication Gateway**. 
-- **Google One-Tap Login**
-- **Email & Password Authentication**
-- Automatic session hydration via `onAuthStateChanged`. The War Room cannot be accessed without clearance.
-
----
-
-## 🛠️ Tech Stack
-
-- **Core Application:** HTML5, Vanilla JavaScript (ESModules)
-- **Styling:** CSS3 with Glassmorphism, CSS Variables, and Inter/JetBrains Mono fonts
-- **Build Tool / Backend Proxy:** Vite 8
-- **AI Engine:** Google Gemini API (`gemini-2.5-flash`)
-- **Identity:** Google Firebase Auth
-- **Visualization:** Native HTML5 Canvas API (Tactical Field Renderer)
+```mermaid
+graph TD
+    %% User Authentication Gate
+    User[Commander Login / SSO] -->|1. Firebase Auth Gate| Auth[Firebase Identity Gateway]
+    Auth -->|Clearance Granted| GUI[High-Contrast B&W Dashboard]
+    
+    %% Input Sources
+    GUI -->|Manual Parameters / Preset Selection| Engine[Adversarial Core Engine]
+    GUI -->|Live Cricbuzz URL| Scraper[CORS-Bypass Scraper Proxy]
+    Scraper -->|Extract Match State & Cache 30s| Engine
+    
+    %% Preset Injection
+    GUI -->|Instant Legendary Presets| Engine
+    
+    %% Multi-Agent Pipeline
+    Engine -->|Assemble Prompt & Context| Gemini[Google Gemini 2.5 Flash]
+    Gemini -->|Native Structured JSON| Debate[Adversarial Trace Parser]
+    
+    %% Specialists Disagreement
+    Debate -->|Quant Model| Q[THE QUANT]
+    Debate -->|Pragmatic Captain| S[THE STRATEGIST]
+    Debate -->|Paranoid Weather Scrutiny| SK[THE SKEPTIC]
+    Debate -->|Poetic Broadcaster| B[THE BROADCASTER]
+    
+    %% Dashboard Sync
+    Q & S & SK & B -->|Reconstruct Strategy| UIUpdate[UI Render Orchestrator]
+    
+    %% Visual & Audio Pipelines
+    UIUpdate -->|Draw Vector Placements| Canvas[Dynamic Theme-Aware Canvas Visualizer]
+    UIUpdate -->|Expressive Vocalization| Speech[Web Speech Synthesis Engine]
+```
 
 ---
 
-## 🚀 Getting Started
+## 🌟 Core System Features
 
-### Prerequisites
-- Node.js 18+
-- A [Google Gemini API Key](https://aistudio.google.com/apikey)
-- A Firebase Project (for Authentication)
+### 1. ⚔️ The Multi-Agent Adversarial Debate
+OMEGA orchestrates a structured, real-time tactical debate utilizing a single optimized, high-fidelity prompt. Four distinct AI personas analyze the game parameters from conflicting perspectives, exposing blind spots and identifying risks:
+*   🧮 **THE QUANT (Probability Shift Engine):** Strictly clinical, objective, and data-driven. Computes matchup exploits, boundary pressure indexes, and historical run-rate shifts.
+*   👑 **THE STRATEGIST (IPL Captaincy Brain):** The practical decision maker. Formulates bowling plans, target coordinates, and pressure-containment goals.
+*   😈 **THE SKEPTIC (Adversarial Critic):** High-tension critique. Highlights spinner limitations, boundary-dimension hazards, and micro-climate failures.
+*   🎙️ **THE BROADCASTER (Match Commentator):** Synthesizes the debate into poetic, cinematic commentary, explaining "why this strategy works" for the fans.
 
-### Installation
+### 2. 🏆 Legendary Scenario Presets (One-Click Testing)
+To eliminate manual form filling during analysis, OMEGA includes a high-contrast **Presets** tab loaded with high-tension IPL and World Cup scenarios:
+1.  **CSK vs GT (IPL 2023 Final Replica):** Nail-biter chase: 10 runs needed off 2 balls. Jadeja on strike vs Mohit Sharma.
+2.  **T20 WC 2024 Final (SA Chase replica):** High pressure: 30 needed off 30 balls. Klaasen set vs Jasprit Bumrah's lethal spell.
+3.  **Chepauk Spin Trap:** Classical spin-trap: 85 runs needed off 48 balls. Turning track, spinner Rashid Khan bowling.
+*Clicking any card instantly hydrates the form values, maps the physical stadiums, and runs the prediction simulation.*
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Hackmaass/CricketAgent-.git
-   cd CricketAgent-
-   ```
+### 🎙️ 3. Expressive Voice Commentary (Harsha Bhogle Synthesis)
+Built-in **Web Speech Synthesis Engine** allows users to listen to the final tactical decision read aloud in professional cricket commentator accentuation:
+*   **Expressive Pitch & Rate:** Expressively calibrated with a measured rate (`0.92`) and pitch (`1.05`) to mirror Harsha Bhogle's broadcasting rhythm.
+*   **Voice Registry Prioritization:** Dynamically queries system voice libraries to bind English Indian or UK dialects automatically.
+*   **Markdown Sanitizer:** Ingests the Gemini output, strips raw technical tags, and reads out a beautiful, expressive commentary.
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### 🎨 4. Theme-Aware Canvas Radar Visualizer
+A highly responsive HTML5 Canvas visualizes exact 2D coordinates for field setups:
+*   **Monochrome Style Mapping:** Dynamically senses body theme rules. In default mode, it renders a lush green field; in **B&W mode**, it shifts to a striking editorial layout featuring an absolute black outfield, crisp white boundary lines, and pulsing white markers.
+*   **Leak-Free Resize Lifecycle:** Binds bound listeners cleanly and disposes of window resize events in the background to guarantee zero memory overhead.
+*   **Energy Saver Loop:** Terminates frame render loops after 8 seconds of active pulsing to preserve system battery and CPU cycles.
 
-3. **Configure Environment Variables:**
-   Create a `.env` file in the root directory:
-   ```env
-   # Google Gemini API Key
-   VITE_GEMINI_KEY=your_gemini_api_key
-
-   # Firebase Configuration
-   VITE_FIREBASE_API_KEY=your_firebase_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
-   ```
-
-4. **Launch the War Room:**
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:5173` in your browser.
+### 🛡️ 5. Systems Self-Diagnostic Suite
+An integrated diagnostics panel in the configuration hub runs modular health checks:
+*   **Scraper Validation:** Pings proxy endpoints to confirm CORS-bypass integrity.
+*   **Gemini API Key Validation:** Performs lightweight health-check / ping request to Gemini API.
+*   **Firebase SDK Integrity:** Verifies successful initialization of authentication endpoints.
 
 ---
 
-## 🎮 Operating the System
+## 🛠️ Technical Stack
 
-1. **Authenticate:** Click "Login" on the cinematic landing page. Use Google or initialize an Email profile.
-2. **Select Match:** Navigate to the "Live Matches" tab inside the War Room. OMEGA automatically pulls active matches from the web.
-3. **Execute Prediction:** Click any live match. OMEGA parses the score, calculates the phase, loads the stadium telemetry, and fires the 4-agent debate loop.
-4. **Analyze Output:** Review the Win Probability split, read the internal agent conflict log, and view the recommended tactical field placements on the canvas.
+*   **Core Architecture:** HTML5, Vanilla JavaScript (ESModules)
+*   **Design Language:** Grayscale Brutalism, Cormorant Garamond / Inter / JetBrains Mono typography
+*   **Build Pipeline & Proxy Routing:** Vite 8
+*   **AI Engine:** Google Gemini API (`gemini-2.5-flash`)
+*   **Identity Management:** Google Firebase Client SDK
+*   **Graphics Engine:** Native 2D Canvas API (Theme-Aware Radar)
+*   **Audio Pipeline:** Web Speech API (`window.speechSynthesis`)
 
 ---
 
-*Built for absolute dominance.* 🏆
+## 🚀 Installation & Setup
+
+### 1. Prerequisites
+*   **Node.js 18+** installed.
+*   A [Google Gemini API Key](https://aistudio.google.com/apikey).
+*   A Google Firebase Project (for Clearance Gate Authentication).
+
+### 2. Getting Started
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Hackmaass/CricketAgent-.git
+    cd CricketAgent-
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Setup:**
+    Create a `.env` file in the root folder and configure the following:
+    ```env
+    # Google Gemini API
+    VITE_GEMINI_KEY=your_gemini_api_key
+
+    # Firebase Authentication Configurations
+    VITE_FIREBASE_API_KEY=your_firebase_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    ```
+
+4.  **Launch Local Host:**
+    ```bash
+    npm run dev
+    ```
+    Open your browser and navigate to `http://localhost:5173`.
+
+---
+
+## 🎮 Command Room Protocol
+
+1.  **Clearance Access:** Click "Clearance Login" or "Launch Command Room" on the minimal home screen. Complete SSO auth using Google.
+2.  **Scenario Loading:** Navigate to the **Presets** tab in the sidebar and select any scenario, or paste a live Cricbuzz score URL.
+3.  **Execute Prediction:** Review calculated parameters and launch `Run Prediction`.
+4.  **Vocalization:** Head to the **Broadcast Feed** tab and click **Listen to Harsha** to synthesize audio review commentary.
+
+---
+
+*Engineered for extreme tactical superiority. Powered by Google Gemini.* 🏏🏆
