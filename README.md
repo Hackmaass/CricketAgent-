@@ -5,9 +5,9 @@
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-000000?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8-000000?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-Auth-000000?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com/)
-[![Aesthetic](https://img.shields.io/badge/Design-Black%20%26%20White%20Editorial-000000?style=for-the-badge)](#)
+[![Aesthetic](https://img.shields.io/badge/Design-Futuristic%20Glassmorphic%20HUD-0ea5e9?style=for-the-badge)](#)
 
-> *"OMEGA is not a simple score predictor. It is a live F1-style pit-wall strategy terminal designed for the high-stakes intensity of the IPL dugout, wrapped in an ultra-premium editorial Black & White visual aesthetic."*
+> *"OMEGA is not a simple score predictor. It is a live F1-style pit-wall strategy terminal designed for the high-stakes intensity of the IPL dugout, wrapped in an ultra-premium cinematic glassmorphic HUD."*
 
 ---
 
@@ -17,7 +17,7 @@
 graph TD
     %% User Authentication Gate
     User[Commander Login / SSO] -->|1. Firebase Auth Gate| Auth[Firebase Identity Gateway]
-    Auth -->|Clearance Granted| GUI[High-Contrast B&W Dashboard]
+    Auth -->|Clearance Granted| GUI[Futuristic Glassmorphic HUD]
     
     %% Input Sources
     GUI -->|Manual Parameters / Preset Selection| Engine[Adversarial Core Engine]
