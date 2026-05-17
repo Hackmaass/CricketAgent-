@@ -90,6 +90,28 @@
     </div>
   </div>
 
+  <!-- ═══ SETTINGS MODAL ═══ -->
+  <div id="setup-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Engine Configuration</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close Settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="setup-group">
+          <label>Google Gemini API Key</label>
+          <p class="setup-hint">Powers the multi-agent prediction engine. Get yours free at <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></p>
+          <div class="key-input-row">
+            <input type="password" id="gemini-key" placeholder="Enter Gemini API key" autocomplete="off" />
+            <button id="save-gemini" class="btn-save">Save</button>
+          </div>
+          <div class="key-status" id="gemini-status"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ WAR ROOM (DASHBOARD) ═══ -->
   <section id="warroom" class="page">
     <header class="wr-header">
@@ -103,8 +125,12 @@
         </div>
       </div>
       <div class="wr-header-right">
-        <button id="wr-setup" class="btn-ghost">⚙ Keys</button>
+        <button id="wr-settings" class="btn-ghost" aria-label="Engine Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
         <div class="wr-clock" id="wr-clock">--:--</div>
+        <button id="wr-signout" class="btn-primary">Sign Out</button>
       </div>
     </header>
 

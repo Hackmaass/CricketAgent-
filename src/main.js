@@ -96,15 +96,32 @@ document.getElementById('nav-setup').addEventListener('click', (e) => {
   }
 });
 
-document.getElementById('wr-setup').addEventListener('click', () => {
+document.getElementById('wr-signout').addEventListener('click', () => {
   if (currentUser) {
     signOut(auth).then(() => showPage('landing'));
   }
 });
-document.getElementById('wr-setup').textContent = 'Sign Out';
+
+// Settings Modal Logic
+function openSettingsModal() { document.getElementById('setup-modal').classList.remove('hidden'); }
+function closeSettingsModal() { document.getElementById('setup-modal').classList.add('hidden'); }
+
+document.getElementById('wr-settings').addEventListener('click', openSettingsModal);
+document.getElementById('modal-close').addEventListener('click', closeSettingsModal);
+document.querySelector('#setup-modal .modal-backdrop').addEventListener('click', closeSettingsModal);
 
 document.getElementById('auth-close').addEventListener('click', closeAuthModal);
 document.querySelector('#auth-modal .modal-backdrop').addEventListener('click', closeAuthModal);
+
+document.getElementById('save-gemini').addEventListener('click', () => {
+  const v = document.getElementById('gemini-key').value.trim();
+  if (v) {
+    geminiKey = v; 
+    localStorage.setItem('omega_gemini', v);
+    document.getElementById('gemini-key').value = '••••••••••';
+    showKeyStatus('gemini-status', 'Key Saved Successfully ✓', 'ok');
+  }
+});
 
 // Auth Form Logic
 let isSignUp = false;
@@ -312,16 +329,31 @@ function renderPrediction(data, state) {
 
   // Debate
   const dt = data.internal_debate_trace || {};
-  let debateHtml = '';
+  const debateContainer = document.getElementById('debate-content');
+  debateContainer.innerHTML = ''; // clear
+
   const q = dt.quant_analysis || {};
-  debateHtml += agentMsg('quant', 'THE QUANT', 'ANALYSIS', [q.probability_shift, q.matchup_exploit && `<strong>Matchup:</strong> ${q.matchup_exploit}`, q.boundary_pressure && `<strong>Boundary:</strong> ${q.boundary_pressure}`, q.risk_projection && `<strong>Risk:</strong> ${q.risk_projection}`]);
   const s = dt.strategist_plan || {};
-  debateHtml += agentMsg('strategist', 'THE STRATEGIST', 'PLAN', [s.primary_decision && `<strong>Call:</strong> ${s.primary_decision}`, s.captaincy_intent, s.pressure_goal]);
   const sk = dt.skeptic_attack || {};
-  debateHtml += agentMsg('skeptic', 'THE SKEPTIC', 'CHALLENGE', [sk.criticism, sk.catastrophic_failure_mode && `<strong>Worst case:</strong> ${sk.catastrophic_failure_mode}`, sk.counter_strategy && `<strong>Counter:</strong> ${sk.counter_strategy}`]);
   const sr = dt.strategist_revision || {};
-  debateHtml += agentMsg('strategist', 'THE STRATEGIST', 'REVISION', [sr.adjusted_plan && `<strong>Revised:</strong> ${sr.adjusted_plan}`, sr.revision_reasoning]);
-  document.getElementById('debate-content').innerHTML = debateHtml;
+
+  const agentMessages = [
+    agentMsg('quant', 'THE QUANT', 'ANALYSIS', [q.probability_shift, q.matchup_exploit && `<strong>Matchup:</strong> ${q.matchup_exploit}`, q.boundary_pressure && `<strong>Boundary:</strong> ${q.boundary_pressure}`, q.risk_projection && `<strong>Risk:</strong> ${q.risk_projection}`]),
+    agentMsg('strategist', 'THE STRATEGIST', 'PLAN', [s.primary_decision && `<strong>Call:</strong> ${s.primary_decision}`, s.captaincy_intent, s.pressure_goal]),
+    agentMsg('skeptic', 'THE SKEPTIC', 'CHALLENGE', [sk.criticism, sk.catastrophic_failure_mode && `<strong>Worst case:</strong> ${sk.catastrophic_failure_mode}`, sk.counter_strategy && `<strong>Counter:</strong> ${sk.counter_strategy}`]),
+    agentMsg('strategist', 'THE STRATEGIST', 'REVISION', [sr.adjusted_plan && `<strong>Revised:</strong> ${sr.adjusted_plan}`, sr.revision_reasoning])
+  ];
+
+  let msgIdx = 0;
+  function showNextAgent() {
+    if (msgIdx >= agentMessages.length) return;
+    const temp = document.createElement('div');
+    temp.innerHTML = agentMessages[msgIdx];
+    debateContainer.appendChild(temp.firstElementChild);
+    msgIdx++;
+    setTimeout(showNextAgent, 800); // 800ms delay between each agent's response
+  }
+  showNextAgent();
 
   // Visual Engine
   const ve = data.visual_tactical_engine || {};
