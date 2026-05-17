@@ -262,27 +262,49 @@
           </div>
         </div>
         <div id="prediction-result" class="prediction-result hidden">
-          <!-- Scoreboard Header -->
-          <div class="pred-header" id="pred-header"></div>
-          <!-- Win Probability -->
-          <div class="pred-card pred-winprob" id="pred-winprob"></div>
-          <!-- Tactical Field -->
-          <div class="pred-card pred-field-card">
-            <div class="card-label">Tactical Field Placement</div>
-            <div class="field-wrap"><canvas id="tactical-field" width="400" height="400"></canvas></div>
+          <!-- Scoreboard Header & Win Prob (Permanent Top Row) -->
+          <div class="pred-top-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div class="pred-card" id="pred-header" style="display:flex; flex-direction:column; justify-content:center; min-height:80px; margin-bottom:0;"></div>
+            <div class="pred-card pred-winprob" id="pred-winprob" style="margin-bottom:0;"></div>
           </div>
-          <!-- Agent Debate -->
-          <div class="pred-card pred-debate">
-            <div class="card-label">Agent Debate</div>
-            <div id="debate-content"></div>
+
+          <!-- Main Split Container -->
+          <div class="pred-main-split">
+            <!-- Left: Visual/Tactical Strategy (Permanent) -->
+            <div class="pred-split-left">
+              <div class="pred-card pred-field-card" style="margin-bottom:16px;">
+                <div class="card-label">Tactical Field Setup</div>
+                <div class="field-wrap" style="padding-top:8px;"><canvas id="tactical-field" width="340" height="340"></canvas></div>
+              </div>
+              <div class="pred-card pred-resolution-card" id="pred-resolution"></div>
+            </div>
+
+            <!-- Right: Tabbed Details (Interactive) -->
+            <div class="pred-split-right">
+              <div class="pred-tabs" role="tablist" aria-label="Strategy Details">
+                <button class="pred-tab active" data-pred-tab="plan" role="tab" aria-selected="true" aria-controls="pred-tab-plan">Tactical Plan</button>
+                <button class="pred-tab" data-pred-tab="debate" role="tab" aria-selected="false" aria-controls="pred-tab-debate">Internal Debate</button>
+                <button class="pred-tab" data-pred-tab="broadcast" role="tab" aria-selected="false" aria-controls="pred-tab-broadcast">Broadcast Feed</button>
+              </div>
+              
+              <div id="pred-tab-plan" class="pred-tab-content active">
+                <div class="pred-card pred-visual" id="pred-visual" style="border:none; background:transparent; padding:0; box-shadow:none;"></div>
+              </div>
+              
+              <div id="pred-tab-debate" class="pred-tab-content">
+                <div class="pred-card pred-debate" style="border:none; background:transparent; padding:0; box-shadow:none;">
+                  <div id="debate-content"></div>
+                </div>
+              </div>
+              
+              <div id="pred-tab-broadcast" class="pred-tab-content">
+                <div class="pred-card pred-broadcast" id="pred-broadcast" style="border:none; background:transparent; padding:0; box-shadow:none;"></div>
+              </div>
+            </div>
           </div>
-          <!-- Visual Engine -->
-          <div class="pred-card pred-visual" id="pred-visual"></div>
-          <!-- Broadcast -->
-          <div class="pred-card pred-broadcast" id="pred-broadcast"></div>
           
           <!-- Google Services Branding -->
-          <div class="google-branding">
+          <div class="google-branding" style="margin-top:24px;">
             Powered by <strong>Google Gemini</strong> ✨
           </div>
         </div>

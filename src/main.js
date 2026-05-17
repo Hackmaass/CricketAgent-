@@ -58,6 +58,23 @@ document.querySelectorAll('.tab-btn').forEach(b => {
   b.addEventListener('click', () => switchTab(b.dataset.tab));
 });
 
+// Prediction tab switching (Concise View)
+function switchPredTab(tabName) {
+  document.querySelectorAll('.pred-tab').forEach(b => {
+    const isActive = b.dataset.predTab === tabName;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  document.querySelectorAll('.pred-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`pred-tab-${tabName}`).classList.add('active');
+}
+document.addEventListener('click', (e) => {
+  const tabBtn = e.target.closest('.pred-tab');
+  if (tabBtn) {
+    switchPredTab(tabBtn.dataset.predTab);
+  }
+});
+
 document.getElementById('enter-warroom').addEventListener('click', () => {
   if (!currentUser) { openAuthModal(); return; }
   showPage('warroom');
@@ -368,6 +385,9 @@ function renderPrediction(data, state) {
       <div class="ph-overs">${mc.phase || ''}</div>
     </div>`;
 
+  // Reset Prediction Tab to Plan view
+  switchPredTab('plan');
+
   // Win Probability
   const wp = data.win_probability || {};
   const aPct = wp.team_a_pct || 50;
@@ -383,6 +403,16 @@ function renderPrediction(data, state) {
       <div class="wp-bar-team team-b" style="width:${bPct}%">${bPct}%</div>
     </div>
     <div class="wp-momentum">${se.momentum_shift || ''}</div>`;
+
+  // Resolution Card (Permanent Left Panel)
+  const tr = data.tactical_resolution || {};
+  document.getElementById('pred-resolution').innerHTML = `
+    <div class="res-title">Tactical Resolution</div>
+    <div class="res-final-call">${tr.final_call || 'No prediction generated.'}</div>
+    <div class="res-meta">
+      <span class="res-conf-label">AI Confidence Index</span>
+      <span class="res-conf-value">${tr.confidence_score || 0}%</span>
+    </div>`;
 
   // Debate
   const dt = data.internal_debate_trace || {};
@@ -412,31 +442,26 @@ function renderPrediction(data, state) {
   }
   showNextAgent();
 
-  // Visual Engine
+  // Visual Engine (Tactical Plan Tab)
   const ve = data.visual_tactical_engine || {};
   document.getElementById('pred-visual').innerHTML = `
-    <div class="card-label">Tactical Intelligence</div>
+    <div class="card-label" style="margin-bottom:12px;">Tactical Telemetry</div>
     <div class="ve-grid">
       <div class="ve-item"><div class="ve-label">Bowling Plan</div><div class="ve-value">${ve.bowling_plan || '—'}</div></div>
       <div class="ve-item"><div class="ve-label">Shot Prediction</div><div class="ve-value">${ve.shot_prediction_zone || '—'}</div></div>
       <div class="ve-item"><div class="ve-label">Danger Zone</div><div class="ve-value">${ve.danger_region || '—'}</div></div>
       <div class="ve-item"><div class="ve-label">Pressure Side</div><div class="ve-value">${ve.field_pressure_side || '—'}</div></div>
-    </div>
-    <div style="margin-top:16px;padding:14px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.15);">
-      <div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--accent);margin-bottom:8px;">⚡ FINAL CALL — ${data.tactical_resolution?.confidence_score || '?'}% CONFIDENCE</div>
-      <div style="font-size:14px;line-height:1.7;color:var(--text-1);">${data.tactical_resolution?.final_call || ''}</div>
     </div>`;
 
-  // Broadcast
+  // Broadcast (Broadcast Feed Tab)
   const bc = data.broadcast_synthesis || {};
   document.getElementById('pred-broadcast').innerHTML = `
-    <div class="card-label">Broadcast</div>
     <div class="bc-headline">${bc.headline || ''}</div>
     <div class="bc-commentary">${bc.elite_commentary || ''}</div>
     <div class="bc-why">${bc.why_this_works || ''}</div>
-    <div class="bc-crowd">🏟️ ${bc.crowd_feeling || ''}</div>`;
+    <div class="bc-crowd" style="margin-top:12px;">🏟️ ${bc.crowd_feeling || ''}</div>`;
 
-  // Field
+  // Field Setup
   const positions = data.tactical_resolution?.field_setup_coordinates || [];
   if (tacticalField && positions.length) tacticalField.setPositions(positions);
 }
