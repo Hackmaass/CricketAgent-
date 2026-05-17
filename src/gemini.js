@@ -64,9 +64,9 @@ RULES:
 
 Return ONLY valid JSON (no markdown fences):
 {
-  "system_energy":{"pressure_level":"<LOW/MEDIUM/HIGH/CRITICAL>","momentum_shift":"<who has momentum>","stadium_tension":"<crowd atmosphere>"},
-  "match_context":{"phase":"${phase}","current_run_rate":"${crr}","required_run_rate":"${rrr||'N/A'}","tactical_temperature":"<COLD/WARM/HOT/BOILING>"},
-  "win_probability":{"team_a_name":"${ms.battingTeam||'Batting'}","team_a_pct":<number>,"team_b_name":"${ms.bowlingTeam||'Bowling'}","team_b_pct":<number>},
+  "system_energy":{"pressure_level":"MEDIUM","momentum_shift":"text description","stadium_tension":"text description"},
+  "match_context":{"phase":"${phase}","current_run_rate":"${crr}","required_run_rate":"${rrr||'N/A'}","tactical_temperature":"WARM"},
+  "win_probability":{"team_a_name":"${ms.battingTeam||'Batting'}","team_a_pct":50,"team_b_name":"${ms.bowlingTeam||'Bowling'}","team_b_pct":50},
   "internal_debate_trace":{
     "quant_analysis":{"probability_shift":"","matchup_exploit":"","boundary_pressure":"","risk_projection":""},
     "strategist_plan":{"primary_decision":"","captaincy_intent":"","pressure_goal":""},
@@ -75,17 +75,17 @@ Return ONLY valid JSON (no markdown fences):
   },
   "visual_tactical_engine":{"bowling_plan":"","shot_prediction_zone":"","danger_region":"","field_pressure_side":""},
   "tactical_resolution":{
-    "final_call":"<2-3 sentence tactical summary>",
-    "confidence_score":<0-100>,
+    "final_call":"tactical text",
+    "confidence_score":85,
     "field_setup_coordinates":[
-      {"position_name":"","x_coord":<-10..10>,"z_coord":<-10..10>,"intent":""}
+      {"position_name":"Deep Midwicket","x_coord":-5,"z_coord":-5,"intent":"Catching boundary"}
     ]
   },
-  "broadcast_synthesis":{"headline":"<punchy headline>","elite_commentary":"<2-3 sentences>","why_this_works":"","crowd_feeling":""}
+  "broadcast_synthesis":{"headline":"headline text","elite_commentary":"commentary text","why_this_works":"","crowd_feeling":""}
 }
 
 Coordinates: (0,0)=pitch center, +x=off, -x=leg, +z=bowler end, -z=batsman end, boundary≈±10.
-Provide exactly 7 field positions. JSON ONLY.`;
+Provide exactly 7 field positions in field_setup_coordinates. JSON ONLY.`;
 }
 
 export async function predict(apiKey, matchState) {
