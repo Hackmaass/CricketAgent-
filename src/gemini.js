@@ -98,14 +98,47 @@ export async function predict(apiKey, matchState) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [{ text: buildPrompt(matchState) }] }],
-      generationConfig: { temperature: 1.0, topP: 0.95, maxOutputTokens: 4096 }
+      generationConfig: { 
+        temperature: 0.7, // Slightly lower temperature for more structured stability
+        topP: 0.95, 
+        maxOutputTokens: 4096,
+        responseMimeType: "application/json" // NATIVE GEMINI STRUCURED JSON OUTPUT
+      }
     })
   });
   if (!res.ok) throw new Error(`API error ${res.status}: ${await res.text()}`);
   const data = await res.json();
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Empty response');
-  let json = text.trim().replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-  try { return JSON.parse(json); }
-  catch { const m = json.match(/\{[\s\S]*\}/); if (m) return JSON.parse(m[0]); throw new Error('Invalid JSON response'); }
+  
+  // Clean JSON response to guarantee parse safety
+  let jsonString = text.trim();
+  
+  // Strip potential markdown wrapper blocks if still present
+  if (jsonString.startsWith('```')) {
+    jsonString = jsonString.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+  }
+
+  try { 
+    return JSON.parse(jsonString); 
+  } catch (err) {
+    // If standard parsing fails, perform regex clean-up of trailing commas and bad control characters
+    try {
+      const cleaned = jsonString
+        .replace(/,\s*([\]}])/g, '$1') // Remove trailing commas
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Strip illegal control characters
+      return JSON.parse(cleaned);
+    } catch (fallbackErr) {
+      // Fallback matching to isolate outer brackets
+      const match = jsonString.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          return JSON.parse(match[0].replace(/,\s*([\]}])/g, '$1'));
+        } catch (e) {
+          throw new Error('Failed to resolve malformed JSON payload from Gemini');
+        }
+      }
+      throw new Error('Invalid JSON structure returned by engine');
+    }
+  }
 }
