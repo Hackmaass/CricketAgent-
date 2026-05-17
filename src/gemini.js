@@ -65,6 +65,10 @@ Provide exactly 7 field positions. JSON ONLY.`;
 }
 
 export async function predict(apiKey, matchState) {
+  if (!apiKey) {
+    throw new Error('Google Gemini API Key is missing. Please provide a VITE_GEMINI_KEY in the .env file.');
+  }
+
   const res = await fetch(`${API_URL}?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -13,6 +13,29 @@ let geminiKey = localStorage.getItem('omega_gemini') || import.meta.env.VITE_GEM
 let tacticalField = null;
 let liveMatches = [];
 
+import { auth } from './firebase.js';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
+
+// ─── Auth State ───
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  const navBtn = document.getElementById('nav-setup');
+  if (user) {
+    navBtn.textContent = 'Sign Out';
+  } else {
+    navBtn.textContent = 'Login';
+  }
+});
+
 // ─── Navigation ───
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -22,13 +45,26 @@ function showPage(id) {
   }
 }
 
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const isActive = b.dataset.tab === tabName;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => switchTab(b.dataset.tab));
+});
+
 document.getElementById('enter-warroom').addEventListener('click', () => {
-  if (!geminiKey) { openModal(); return; }
+  if (!currentUser) { openAuthModal(); return; }
   showPage('warroom');
   loadLiveMatches();
 });
 document.getElementById('quick-predict').addEventListener('click', () => {
-  if (!geminiKey) { openModal(); return; }
+  if (!currentUser) { openAuthModal(); return; }
   showPage('warroom');
   switchTab('manual');
   loadLiveMatches();
@@ -44,21 +80,75 @@ function tick() {
 }
 setInterval(tick, 1000); tick();
 
-// ─── Modal ───
-function openModal() { document.getElementById('setup-modal').classList.remove('hidden'); }
-function closeModal() { document.getElementById('setup-modal').classList.add('hidden'); }
-document.getElementById('nav-setup').addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-document.getElementById('wr-setup').addEventListener('click', openModal);
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+// ─── Auth Modal ───
+function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
+function closeAuthModal() { 
+  document.getElementById('auth-modal').classList.add('hidden'); 
+  document.getElementById('auth-error').textContent = '';
+}
 
-// Gemini key save
-document.getElementById('save-gemini').addEventListener('click', () => {
-  const v = document.getElementById('gemini-key').value.trim();
-  if (v) {
-    geminiKey = v; localStorage.setItem('omega_gemini', v);
-    document.getElementById('gemini-key').value = '••••••••••';
-    showKeyStatus('gemini-status', 'Saved ✓', 'ok');
+document.getElementById('nav-setup').addEventListener('click', (e) => { 
+  e.preventDefault(); 
+  if (currentUser) {
+    signOut(auth);
+  } else {
+    openAuthModal(); 
+  }
+});
+
+document.getElementById('wr-setup').addEventListener('click', () => {
+  if (currentUser) {
+    signOut(auth).then(() => showPage('landing'));
+  }
+});
+document.getElementById('wr-setup').textContent = 'Sign Out';
+
+document.getElementById('auth-close').addEventListener('click', closeAuthModal);
+document.querySelector('#auth-modal .modal-backdrop').addEventListener('click', closeAuthModal);
+
+// Auth Form Logic
+let isSignUp = false;
+const authForm = document.getElementById('auth-form');
+const authSwitch = document.getElementById('auth-switch-mode');
+const authError = document.getElementById('auth-error');
+
+authSwitch.addEventListener('click', (e) => {
+  e.preventDefault();
+  isSignUp = !isSignUp;
+  document.getElementById('btn-email-login').textContent = isSignUp ? 'Initialize Protocol' : 'Sign In';
+  document.getElementById('auth-mode-text').textContent = isSignUp ? 'Already a commander?' : 'Need access?';
+  authSwitch.textContent = isSignUp ? 'Sign In' : 'Initialize Protocol (Sign Up)';
+  authError.textContent = '';
+});
+
+authForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  
+  try {
+    if (isSignUp) {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } else {
+      await signInWithEmailAndPassword(auth, email, password);
+    }
+    closeAuthModal();
+    showPage('warroom');
+    loadLiveMatches();
+  } catch (error) {
+    authError.textContent = error.message.replace('Firebase:', '').trim();
+  }
+});
+
+document.getElementById('btn-google-login').addEventListener('click', async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+    closeAuthModal();
+    showPage('warroom');
+    loadLiveMatches();
+  } catch (error) {
+    authError.textContent = error.message.replace('Firebase:', '').trim();
   }
 });
 function showKeyStatus(id, msg, cls) {
@@ -71,15 +161,6 @@ function showKeyStatus(id, msg, cls) {
 // Init key indicators
 if (geminiKey) showKeyStatus('gemini-status', 'Key saved', 'ok');
 
-// ─── Tabs ───
-function switchTab(tabName) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(`tab-${tabName}`).classList.add('active');
-}
-document.querySelectorAll('.tab-btn').forEach(b => {
-  b.addEventListener('click', () => switchTab(b.dataset.tab));
-});
 
 // ─── Live Matches ───
 async function loadLiveMatches() {
@@ -151,7 +232,7 @@ document.getElementById('refresh-matches')?.addEventListener('click', loadLiveMa
 // ─── Manual Form ───
 document.getElementById('match-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  if (!geminiKey) { openModal(); return; }
+  if (!currentUser) { openAuthModal(); return; }
   const state = {
     innings: document.getElementById('f-innings').value,
     battingTeam: document.getElementById('f-batting').value,

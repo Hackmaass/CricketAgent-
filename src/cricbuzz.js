@@ -3,7 +3,17 @@
 // Uses Vite proxy to bypass CORS
 // ═══════════════════════════════════════════
 
+let cachedMatches = null;
+let lastFetchTime = 0;
+const CACHE_TTL_MS = 30000; // 30 seconds
+
 export async function fetchLiveMatches() {
+  const now = Date.now();
+  if (cachedMatches && (now - lastFetchTime < CACHE_TTL_MS)) {
+    console.log('Returning cached matches');
+    return cachedMatches;
+  }
+
   try {
     // Vite proxy handles this and sends to https://www.cricbuzz.com
     const res = await fetch('/api/cricbuzz/cricket-match/live-scores', {
@@ -90,10 +100,12 @@ export async function fetchLiveMatches() {
       }
     });
 
+    cachedMatches = matches;
+    lastFetchTime = Date.now();
     return matches;
   } catch (err) {
     console.warn('Cricbuzz fetch failed:', err.message);
-    return [];
+    return cachedMatches || [];
   }
 }
 

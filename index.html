@@ -51,24 +51,41 @@
     </div>
   </section>
 
-  <!-- ═══ SETUP MODAL ═══ -->
-  <div id="setup-modal" class="modal hidden">
+  <!-- ═══ AUTH MODAL ═══ -->
+  <div id="auth-modal" class="modal hidden">
     <div class="modal-backdrop"></div>
-    <div class="modal-content">
+    <div class="modal-content auth-content">
       <div class="modal-header">
-        <h2>API Configuration</h2>
-        <button class="modal-close" id="modal-close">✕</button>
+        <h2>Commander Authentication</h2>
+        <button class="modal-close" id="auth-close" aria-label="Close Authentication Modal">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="setup-group">
-          <label>Gemini API Key</label>
-          <p class="setup-hint">Powers the prediction engine. Get yours free at <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></p>
-          <div class="key-input-row">
-            <input type="password" id="gemini-key" placeholder="Enter Gemini API key" autocomplete="off" />
-            <button id="save-gemini" class="btn-save">Save</button>
+      <div class="modal-body auth-body">
+        
+        <button id="btn-google-login" class="btn-provider">
+          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)"><path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/><path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/><path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"/><path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/></g></svg>
+          Continue with Google
+        </button>
+
+        <div class="auth-divider"><span>OR</span></div>
+
+        <form id="auth-form" class="setup-group">
+          <div class="fg">
+            <label for="auth-email">Email</label>
+            <input type="email" id="auth-email" placeholder="commander@omega.com" autocomplete="email" required />
           </div>
-          <div class="key-status" id="gemini-status"></div>
-        </div>
+          <div class="fg">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+          <button type="submit" id="btn-email-login" class="btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Sign In</button>
+          
+          <div class="auth-switch">
+            <span id="auth-mode-text">Need access?</span>
+            <a href="#" id="auth-switch-mode">Initialize Protocol (Sign Up)</a>
+          </div>
+          <div id="auth-error" class="key-status err" style="margin-top:8px; text-align:center;"></div>
+        </form>
+
       </div>
     </div>
   </div>
@@ -77,7 +94,7 @@
   <section id="warroom" class="page">
     <header class="wr-header">
       <div class="wr-header-left">
-        <button id="back-to-landing" class="btn-icon" title="Home">
+        <button id="back-to-landing" class="btn-icon" title="Home" aria-label="Return to Home Page">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
         <div class="wr-brand">
@@ -94,9 +111,9 @@
     <div class="wr-body">
       <!-- LEFT: Match Selection / Input -->
       <div class="wr-sidebar">
-        <div class="sidebar-tabs">
-          <button class="tab-btn active" data-tab="live">Live Matches</button>
-          <button class="tab-btn" data-tab="manual">Manual Input</button>
+        <div class="sidebar-tabs" role="tablist" aria-label="Match Input Modes">
+          <button class="tab-btn active" data-tab="live" role="tab" aria-selected="true" aria-controls="tab-live">Live Matches</button>
+          <button class="tab-btn" data-tab="manual" role="tab" aria-selected="false" aria-controls="tab-manual">Manual Input</button>
         </div>
 
         <!-- Live Matches Tab -->
@@ -115,7 +132,7 @@
             <div class="form-section">
               <div class="form-row-2">
                 <div class="fg">
-                  <label>Batting</label>
+                  <label for="f-batting">Batting</label>
                   <select id="f-batting">
                     <option value="">Select</option>
                     <option>CSK</option><option>MI</option><option>RCB</option><option>KKR</option><option>DC</option>
@@ -123,7 +140,7 @@
                   </select>
                 </div>
                 <div class="fg">
-                  <label>Bowling</label>
+                  <label for="f-bowling">Bowling</label>
                   <select id="f-bowling">
                     <option value="">Select</option>
                     <option>CSK</option><option>MI</option><option>RCB</option><option>KKR</option><option>DC</option>
@@ -132,25 +149,25 @@
                 </div>
               </div>
               <div class="form-row-3">
-                <div class="fg"><label>Score</label><input type="number" id="f-score" placeholder="0" min="0" /></div>
-                <div class="fg"><label>Wickets</label><input type="number" id="f-wickets" placeholder="0" min="0" max="10" /></div>
-                <div class="fg"><label>Overs</label><input type="number" id="f-overs" placeholder="0.0" min="0" max="20" step="0.1" /></div>
+                <div class="fg"><label for="f-score">Score</label><input type="number" id="f-score" placeholder="0" min="0" /></div>
+                <div class="fg"><label for="f-wickets">Wickets</label><input type="number" id="f-wickets" placeholder="0" min="0" max="10" /></div>
+                <div class="fg"><label for="f-overs">Overs</label><input type="number" id="f-overs" placeholder="0.0" min="0" max="20" step="0.1" /></div>
               </div>
               <div class="form-row-2">
                 <div class="fg">
-                  <label>Innings</label>
+                  <label for="f-innings">Innings</label>
                   <select id="f-innings"><option value="1">1st Innings</option><option value="2">2nd Innings</option></select>
                 </div>
-                <div class="fg"><label>Target</label><input type="number" id="f-target" placeholder="—" min="0" /></div>
+                <div class="fg"><label for="f-target">Target</label><input type="number" id="f-target" placeholder="—" min="0" /></div>
               </div>
               <div class="form-row-2">
-                <div class="fg"><label>Striker</label><input type="text" id="f-striker" placeholder="Name (runs)" /></div>
-                <div class="fg"><label>Non-Striker</label><input type="text" id="f-nonstriker" placeholder="Name (runs)" /></div>
+                <div class="fg"><label for="f-striker">Striker</label><input type="text" id="f-striker" placeholder="Name (runs)" /></div>
+                <div class="fg"><label for="f-nonstriker">Non-Striker</label><input type="text" id="f-nonstriker" placeholder="Name (runs)" /></div>
               </div>
               <div class="form-row-2">
-                <div class="fg"><label>Bowler</label><input type="text" id="f-bowler" placeholder="Name" /></div>
+                <div class="fg"><label for="f-bowler">Bowler</label><input type="text" id="f-bowler" placeholder="Name" /></div>
                 <div class="fg">
-                  <label>Type</label>
+                  <label for="f-bowlertype">Type</label>
                   <select id="f-bowlertype">
                     <option value="">Select</option>
                     <option value="fast">Fast</option><option value="fast-medium">Fast-Medium</option>
@@ -161,7 +178,7 @@
               </div>
               <div class="form-row-2">
                 <div class="fg">
-                  <label>Venue</label>
+                  <label for="f-venue">Venue</label>
                   <select id="f-venue">
                     <option value="">Select</option>
                     <option>Wankhede, Mumbai</option><option>Chepauk, Chennai</option><option>Chinnaswamy, Bengaluru</option>
@@ -170,11 +187,11 @@
                   </select>
                 </div>
                 <div class="fg">
-                  <label>Dew</label>
+                  <label for="f-dew">Dew</label>
                   <select id="f-dew"><option>None</option><option>Light</option><option>Moderate</option><option>Heavy</option></select>
                 </div>
               </div>
-              <div class="fg full"><label>Context</label><textarea id="f-context" rows="2" placeholder="Momentum, key moments..."></textarea></div>
+              <div class="fg full"><label for="f-context">Context</label><textarea id="f-context" rows="2" placeholder="Momentum, key moments..."></textarea></div>
             </div>
             <button type="submit" class="btn-predict">
               <span>⚡ Run Prediction</span>
@@ -219,6 +236,11 @@
           <div class="pred-card pred-visual" id="pred-visual"></div>
           <!-- Broadcast -->
           <div class="pred-card pred-broadcast" id="pred-broadcast"></div>
+          
+          <!-- Google Services Branding -->
+          <div class="google-branding">
+            Powered by <strong>Google Gemini</strong> ✨
+          </div>
         </div>
         <div id="prediction-error" class="prediction-error hidden"></div>
       </div>

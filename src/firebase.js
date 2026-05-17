@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration using Vite environment variables
 const firebaseConfig = {
@@ -12,6 +13,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
-// Export the initialized app (you can also export auth, db, etc. here later)
+// Export the initialized app
 export default app;
